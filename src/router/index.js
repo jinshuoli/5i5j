@@ -24,7 +24,7 @@ import test from '@/components/test.vue'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history', // 去掉hash
+  mode: 'history', // 去掉hash
   routes: [{
       path: '/5i5j/login',
       name: 'login',
