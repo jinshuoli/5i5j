@@ -1,3 +1,4 @@
+<!-- 这是呼入记录的通话记录 -->
 <template>
   <div>
     <el-form ref="CallLogForm" :inline="true">
@@ -20,15 +21,15 @@
       <el-form-item>
         <el-input v-model.trim="callLogForm.CustomerNumber" placeholder="按客户号码查询"></el-input>
       </el-form-item>
-    <!-- 时间区域选择 —— start -->
+      <!-- 时间区域选择 —— start -->
       <el-form-item label="时间：" tag="div">
         <el-date-picker v-model.trim="dateValue" type="datetimerange" @change="dateChange" placeholder="选择日期范围">
         </el-date-picker>
         <el-checkbox v-model.trim="callLogForm.isDiff">号码去重</el-checkbox>
         <el-button type="primary" @click="QueryOutgoing">查询</el-button>
-        <el-button type="primary" @click="export2Excel">导出</el-button>
+        <el-button type="primary" :loading="exportLoading" @click="export2file">导出</el-button>
       </el-form-item>
-    <!-- 时间区域选择 —— end-->
+      <!-- 时间区域选择 —— end-->
     </el-form>
     <!-- 部门选择树 —— start  -->
     <tree-menu :dialogState="isTreeDialog" ref="postinfo" @on-close="closeDialog" @post-node="getNodes">
@@ -57,11 +58,11 @@
           <el-tag type="warning">{{scope.row.otherms}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="call_time" label="拨打时间" style="width: 150px">
+      <el-table-column prop="call_time" label="拨打时间" width="150px">
       </el-table-column>
       <template v-hide="!callLogForm.isDiff">
-        <el-table-column  label="时长">
-            <template scope="scope">{{scope.row.callDuration}} 秒</template>
+        <el-table-column label="时长">
+          <template scope="scope">{{scope.row.callDuration}} 秒</template>
         </el-table-column>
         <el-table-column prop="csName" label="状态">
         </el-table-column>
@@ -82,8 +83,6 @@
           </template>
         </el-table-column>
       </template>
-      <!--      <el-table-column prop="" label="更多">
-      </el-table-column> -->
     </el-table>
     <br>
     <!-- 表格 —— end-->
@@ -95,6 +94,17 @@
       </el-col>
     </el-row>
     <!-- 分页 —— end-->
+    <!-- 导出的弹框 —— start -->
+    <el-dialog title="导出样例" :visible.sync="export2fileDialog" size="tiny">
+      <span>请填写导出的样例文件后导入</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="export2fileDialog = false">取 消</el-button>
+        <a :href="fileUrl" target="_blank" :download="fileUrl">
+          <el-button type="primary" @click="export2fileDialog = false">确 定</el-button>
+        </a>
+      </span>
+    </el-dialog>
+    <!-- 导出的弹框 —— end -->
     <!-- 播放录音弹框 —— start -->
     <el-dialog title="播放录音" :visible.sync="dialogAudio" @close="stopAudio">
       <audio autoplay controls onclick="this.play();" id="audio" style="width:100%">
@@ -139,7 +149,12 @@ export default {
         dateVal: '',
       },
       dateValue: '',
+      // 音频路径
       audioSrc: '',
+      // 导出
+      export2fileDialog: false,
+      exportLoading: false,
+      fileUrl: '',
       // 表格(通话记录)
       tableData: [],
       tableLoading: false,
@@ -189,7 +204,7 @@ export default {
     // 获取通话记录表格的数据
     getOutgoingTable() {
       this.tableLoading = true;
-      this.$axios.post('callRecords_queryCallInList.action','jsonData=' + JSON.stringify(this.callLogForm)).then(response => {
+      this.$axios.post('callRecords_queryCallInList.action', 'jsonData=' + JSON.stringify(this.callLogForm)).then(response => {
         this.tableLoading = false;
         try {
           console.table(JSON.parse(response.data))
@@ -208,21 +223,21 @@ export default {
       })
     },
     // 导出表格
-    export2Excel() {　　　　　　
-      require.ensure([], () => {　　　　　　　　
-        const { export_json_to_excel } = require('@/vendor/Export2Excel');　　　　　　　　
-        const tHeader = ["员工编号", "员工姓名", "渠道", "员工号码", "小号",
-          "客户号码", "拨打时间", "时长(秒)", "状态",
-        ];
-        const filterVal = ["code", "name", "channel_name", "prtms", "acms",
-          "otherms", "call_time", "callDuration", "csName"
-        ];　　　　　　　　
-        const data = this.formatJson(filterVal, this.tableData);　　　　　　　　
-        export_json_to_excel(tHeader, data, "通话记录");
-      })　　　　
-    },
-    formatJson(filterVal, jsonData) {　　　　　　
-      return jsonData.map(v => filterVal.map(j => v[j]))　　　　
+    export2file() {
+      this.exportLoading = true;
+      this.$axios.post('callRecords_callInListExportExcel.action', 'jsonData=' + JSON.stringify(this.callLogForm)).then(response => {
+        var res = JSON.parse(response.data)
+        if (res.result == 'success') {
+          this.fileUrl = res.filepath;
+          this.export2fileDialog = true;
+        } else {
+          this.$message({ message: res.cause, type: 'error' });
+        }
+        this.exportLoading = false;
+      }, response => {
+        this.exportLoading = false;
+        this.$message({ message: "导出失败：" + response, type: 'error' });
+      })
     },
     // 播放录音
     playAudio(index, row) {

@@ -504,7 +504,7 @@ export default {
         this.$message({ message: "亲！没有新增成功哟！" + response, type: 'error' });
       })
     },
-    // 导出
+    // 导出表格
     export2file() {
       this.exportLoading = true;
       this.$axios.post('staff_exportExcel.action','jsonData=' + JSON.stringify(this.staffForm)).then(response => {
