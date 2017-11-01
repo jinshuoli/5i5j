@@ -27,7 +27,7 @@
                 <el-date-picker v-model.trim="dateValue" type="datetimerange" @change="dateChange" placeholder="选择日期范围">
                 </el-date-picker>
                 <el-button type="primary" @click="QueryNotifyRecord">查询</el-button>
-                <el-button type="primary" @click="export2Excel">导出</el-button>
+                <el-button type="primary" :loading="exportLoading" @click="export2file">导出</el-button>
               </el-form-item>
               <!-- 时间区域选择 —— end-->
             </el-form>
@@ -63,6 +63,17 @@
             </el-table>
             <br>
             <!-- 表格1 —— end-->
+            <!-- 导出的弹框 —— start -->
+            <el-dialog title="导出样例" :visible.sync="export2fileDialog" size="tiny">
+              <span>请填写导出的样例文件后导入</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="export2fileDialog = false">取 消</el-button>
+                <a :href="fileUrl" target="_blank" :download="fileUrl">
+                  <el-button type="primary" @click="export2fileDialog = false">确 定</el-button>
+                </a>
+              </span>
+            </el-dialog>
+            <!-- 导出的弹框 —— end -->
             <!-- 分页 —— start-->
             <el-row>
               <el-col :offset="8">
@@ -108,6 +119,10 @@ export default {
       isTreeDialog: false,
       // 时间
       dateValue: '',
+      // 导出
+      export2fileDialog: false,
+      exportLoading: false,
+      fileUrl: '',
       // 表格
       tableData: [],
       tableLoading: false,
@@ -180,14 +195,21 @@ export default {
       })
     },
     // 导出表格
-    export2Excel() {　　　　　　
-      require.ensure([], () => {　　　　　　　　
-        const { export_json_to_excel } = require('@/vendor/Export2Excel');　　　　　　　　
-        const tHeader = ["时间", "客户号码", "状态(S:成功,F:失败)", "场景", "内容", "计费(条)", "员工姓名"];
-        const filterVal = ["timestamp", "targetNumber", "state", "scenario", "content", "cntsms", "userName"];
-        const data = this.formatJson(filterVal, this.tableData);　　　　　　　　
-        export_json_to_excel(tHeader, data, "挂机记录");
-      })　　　　
+    export2file() {　　　　　　
+      this.exportLoading = true;
+      this.$axios.post('notifyRecord_notifyRecordExportExcel.action', 'jsonData=' + JSON.stringify(this.OnHokForm)).then(response => {
+        var res = JSON.parse(response.data)
+        if (res.result == 'success') {
+          this.fileUrl = res.filepath;
+          this.export2fileDialog = true;
+        } else {
+          this.$message({ message: res.cause, type: 'error' });
+        }
+        this.exportLoading = false;
+      }, response => {
+        this.exportLoading = false;
+        this.$message({ message: "导出失败：" + response, type: 'error' });
+      })　　　
     },
     formatJson(filterVal, jsonData) {　　　　　　
       return jsonData.map(v => filterVal.map(j => v[j]))　　　　

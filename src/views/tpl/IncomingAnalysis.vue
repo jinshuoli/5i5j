@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" @click="QueryAnalysis">统计</el-button>
-          <el-button type="primary" @click="export2file">导出</el-button>
+          <el-button type="primary" :loading="exportLoading" @click="export2file">导出</el-button>
           <!-- <span>不参与统计： <a href="">0条</a></span> -->
           <!-- <span>无效数据： <a href="">0条</a></span> -->
         </el-form-item>
@@ -61,6 +61,7 @@
           </a>
         </span>
       </el-dialog>
+      <!-- 导出的弹框 —— end -->
       <!-- 部门选择树 —— end -->
       <!-- 表格 ——start-->
       <el-table ref="multipleTable" v-loading="tableLoading" :data="tableData" border tooltip-effect="dark" style="width: 100%">
@@ -122,9 +123,10 @@ export default {
       dateValue: '',
       // 表格
       tableData: [],
-      // 导出弹框
+      // 导出
       export2fileDialog: false,
-      tableLoading: false,
+      exportLoading: false,
+      fileUrl: '',
       // 分页选中
       currentPage: 1,
       pageSize: 5, // 每页显示条数
@@ -194,7 +196,7 @@ export default {
     export2file() {　
       this.exportLoading = true;
       this.$axios.post('callInAnalyze_exportExcel.action','jsonData=' + JSON.stringify(this.InboundAnalyForm)).then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         var res = JSON.parse(response.data)
         if (res.result == 'success') {
           // window.open(res.filepath);
@@ -208,33 +210,6 @@ export default {
         this.exportLoading = false;
         this.$message({ message: "导出失败：" + response, type: 'error' });
       })
-      //修改
-
-      // if (this.InboundAnalysisForm.button === "rest") {
-      //   require.ensure([], () => {　　　　　　　　
-      //     const { export_json_to_excel } = require('@/vendor/Export2Excel');　　　　　　　　
-      //     const tHeader = ["员工姓名", "渠道", "员工编号", "已接通", "未接通", "总电话量", "接通率(%)"];　　　　　　　　
-      //     const filterVal = ["name", "channelName", "code", "connTotal", "disconnTotal", "callTotal", "connRate"];　　　　
-      //     const data = this.formatJson(filterVal, this.tableData);　　　　　　　　
-      //     export_json_to_excel(tHeader, data, "呼入分析-按坐席");
-      //   })　　　　
-      // } else if (this.InboundAnalysisForm.button === "dept") {
-      //   require.ensure([], () => {　　　　　　　　
-      //     const { export_json_to_excel } = require('@/vendor/Export2Excel');　　　　　　　　
-      //     const tHeader = ["部门", "已接通", "未接通", "总电话量", "接通率(%)"];　　　　　　　　
-      //     const filterVal = ["orgName", "connTotal", "disconnTotal", "callTotal", "connRate"];　　　　　　　　
-      //     const data = this.formatJson(filterVal, this.tableData);　　　　　　　　
-      //     export_json_to_excel(tHeader, data, "呼入分析-按部门");
-      //   })　
-      // } else if (this.InboundAnalysisForm.button === "media") {
-      //   require.ensure([], () => {　　　　　　　　
-      //     const { export_json_to_excel } = require('@/vendor/Export2Excel');　　　　　　　　
-      //     const tHeader = ["渠道", "已接通", "未接通", "总电话量", "接通率(%)"];　　　　　　　　
-      //     const filterVal = ["channelName", "connTotal", "disconnTotal", "callTotal", "connRate"];　　　　　　　　
-      //     const data = this.formatJson(filterVal, this.tableData);　　　　　　　　
-      //     export_json_to_excel(tHeader, data, "呼入分析-按媒体");
-      //   })
-      // }
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]))　　　　
