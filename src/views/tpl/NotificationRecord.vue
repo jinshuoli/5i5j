@@ -197,7 +197,7 @@ export default {
     // 导出表格
     export2file() {　　　　　　
       this.exportLoading = true;
-      this.$axios.post('notifyRecord_notifyRecordExportExcel.action', 'jsonData=' + JSON.stringify(this.OnHokForm)).then(response => {
+      this.$axios.post('notifyRecord_notifyRecordExportExcel.action', 'jsonData=' + JSON.stringify(this.OnHookForm)).then(response => {
         var res = JSON.parse(response.data)
         if (res.result == 'success') {
           this.fileUrl = res.filepath;

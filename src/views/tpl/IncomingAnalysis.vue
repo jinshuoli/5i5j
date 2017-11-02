@@ -195,7 +195,7 @@ export default {
     // 导出表格
     export2file() {　
       this.exportLoading = true;
-      this.$axios.post('callInAnalyze_exportExcel.action','jsonData=' + JSON.stringify(this.InboundAnalyForm)).then(response => {
+      this.$axios.post('callInAnalyze_exportExcel.action','jsonData=' + JSON.stringify(this.InboundAnalysisForm)).then(response => {
         // console.log(response.data)
         var res = JSON.parse(response.data)
         if (res.result == 'success') {
