@@ -64,7 +64,7 @@
       <el-col :offset="1" :span="8">
         <el-button type="primary" @click="AddStaffDialog = true">新增</el-button>
         <el-button type="primary" :loading="exportLoading" @click="export2file">导出</el-button>
-        <el-button type="primary" :loading="dialogLoading" @click="dialogImportFile = true">导入</el-button>
+        <el-button type="primary" :loading="ImportFileLoading" @click="dialogImportFile = true">导入</el-button>
       </el-col>
     </el-row>
     <br>
@@ -239,7 +239,7 @@
             <el-option v-for="(item,index) in items.channel" :value="item.value" :label="item.label" :key="index"></el-option>
           </el-select> -
           <el-input v-model.trim="items.master" :disabled="items.isDisabled" style="width:160px;" placeholder="主叫">主叫</el-input> -
-          <el-input v-model.trim="items.trumpet" :disabled="items.isDisabled" style="width:160px;" placeholder="小号"></el-input> -
+          <el-input v-model.trim="items.trumpet" :disabled="items.isDisabled" style="width:160px;" placeholder="小号"></el-input>
           <!-- <el-checkbox v-model.trim="items.upline" :disabled="items.isDisabled">绑定</el-checkbox> -->
         </el-form-item>
         <!-- 动态添加号码 —— end -->
@@ -344,6 +344,8 @@ export default {
         numberList: [],
       },
       isDie: false,
+      // 导入的loding
+      ImportFileLoading:false,
       // 导入文件弹框
       dialogImportFile: false,
       // 导入文件列表
@@ -528,6 +530,7 @@ export default {
         console.log("ImportFile")
         this.$refs.ImportFile.submit();
         this.dialogImportFile = false;
+        this.ImportFileLoading = true;
         console.log(this.ImportFileData, this.fileList)
       },
     // 文件上传成功的钩子
@@ -535,6 +538,7 @@ export default {
       console.log("flieSuccess:", response)
       var res = JSON.parse(response)
       if (res.result == 'success') {
+        this.ImportFileLoading = false;
         this.$message({ message: "导入成功！", type: 'success' });
         this.queryStaff();
       } else {
@@ -544,6 +548,7 @@ export default {
     },
     // 文件上传失败的钩子
     fileError(err, file, fileList) {
+      this.ImportFileLoading = false;
       this.$message({ message: "导入失败！", type: 'error' });
       this.fileList = [];
     },

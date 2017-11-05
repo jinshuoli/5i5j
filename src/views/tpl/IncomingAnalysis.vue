@@ -97,7 +97,7 @@
 </template>
 <script>
 import treeMenu from '@/components/selectSector'
-
+import { getPeriodString,getPeriodArray} from '@/base/date'
 export default {
   components: {
     treeMenu,
@@ -115,14 +115,15 @@ export default {
         button: 'media',
         checkBox: '',
         // 时间
-        dateVal: '',
+        dateVal: getPeriodString(),
       },
       // 部门选择
       isTreeDialog: false,
       // 时间
-      dateValue: '',
+      dateValue: getPeriodArray(),
       // 表格
       tableData: [],
+      tableLoading:false,
       // 导出
       export2fileDialog: false,
       exportLoading: false,

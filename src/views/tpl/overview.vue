@@ -74,6 +74,7 @@ export default {
         custCallIn: 0,
         callOut: 0
       },
+      adminPermission:false,
     }
   },
   methods: {
