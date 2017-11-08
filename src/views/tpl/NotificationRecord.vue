@@ -95,7 +95,7 @@
 <script>
 import { formatDate } from '@/base/date'
 import treeMenu from '@/components/selectSector'
-
+import { getPeriodString,getPeriodArray} from '@/base/date'
 export default {
   components: {
     treeMenu,
@@ -113,12 +113,12 @@ export default {
         AllScenes: '',
         targetNumber: '',
         state: '',
-        dateVal: '',
+        dateVal: getPeriodString(),
       },
       // 选择部门
       isTreeDialog: false,
       // 时间
-      dateValue: '',
+      dateValue: getPeriodArray(),
       // 导出
       export2fileDialog: false,
       exportLoading: false,

@@ -135,9 +135,6 @@ export default {
     };
   },
   methods: {
-    dateChange(val) {
-      // console.log(val)
-    },
     getChannel() {
       this.$axios.get('channel_channelList.action').then(response => {
         this.ChannelGet = JSON.parse(response.data)

@@ -126,6 +126,7 @@
 <script>
 import { formatDate } from '@/base/date'
 import treeMenu from '@/components/selectSector'
+import { getPeriodString,getPeriodArray} from '@/base/date'
 
 export default {
   components: {

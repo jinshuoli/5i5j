@@ -192,8 +192,8 @@ export default {
           this.isAddEdit === 1 ?
             url = 'sysUser_addUser.action' :
             url = 'sysUser_update.action';
-          console.log(url)
-          console.log(JSON.stringify(this.AccountForm))
+          // console.log(url)
+          // console.log(JSON.stringify(this.AccountForm))
           this.$axios.post(url ,'jsonData=' + JSON.stringify(this.AccountForm)).then(response => {
             this.$message(JSON.parse(response.data))
             this.dialogFormVisible = false;

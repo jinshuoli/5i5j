@@ -85,16 +85,12 @@ export default {
       })
     },
     login() {
-        alert(1)
       this.$axios.get('sysUser_login.action').then(response => {
         sessionStorage.setItem('loginInfo', response.data);
         // this.$message({ message: "登陆成功！", type: 'success', });
         this.getNav();
       }, response => {
-
-        sessionStorage.setItem('loginInfo', "{"functionpermission":true,"permission":true,"loginFlag":true}");
-
-
+        // sessionStorage.setItem('loginInfo',"{"functionpermission":true,"permission":true,"loginFlag":true}");
         this.$message({ message: "登陆失败 " + response, type: 'error', });
       })
     },
