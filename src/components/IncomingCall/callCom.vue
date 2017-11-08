@@ -147,9 +147,9 @@ export default {
         CustomerNumber: '',
         isDiff: false,
         // 时间
-        dateVal: '',
+        dateVal: getPeriodString(),
       },
-      dateValue: '',
+      dateValue: getPeriodArray(),
       // 音频路径
       audioSrc: '',
       // 导出
