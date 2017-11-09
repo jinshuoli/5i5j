@@ -64,11 +64,15 @@
         <el-table-column label="时长">
           <template scope="scope">{{scope.row.callDuration}} 秒</template>
         </el-table-column>
-        <el-table-column prop="csName" label="状态">
-          <el-tooltip placement="top">
-            <div slot="content">{{scope.row.csDesc}}</div>
-            <template scope="scope">{{scope.row.csName}}</template>            
-          </el-tooltip>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-popover trigger="hover" placement="top">
+              <p>描述: {{ scope.row.csDesc }}</p>
+              <div slot="reference" class="name-wrapper">
+                <el-tag size="medium">{{ scope.row.csName }}</el-tag>
+              </div>
+            </el-popover>
+          </template>
         </el-table-column>
         <el-table-column prop="releaseDir" label="释放方式">
         </el-table-column>
