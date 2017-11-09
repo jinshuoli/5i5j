@@ -12,7 +12,6 @@ export default {
   methods: {
     test() {
     	let date = Date.now()
-
         this.$axios.post("sysUser_test.action","jsonData="+JSON.stringify({firstName: '中文', lastName: 'Flintstone' ,time: date})).then(response => {
             console.log(response.data)
           }, response => {

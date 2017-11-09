@@ -59,7 +59,6 @@ export default {
     treeOk() {
       console.log('选中的keys', this.$refs.tree.getCheckedKeys())
       console.log('选中的节点', JSON.stringify(this.$refs.tree.getCheckedNodes()))
-
       this.$emit('post-node', this.$refs.tree.getCheckedNodes()) // post-node 告诉父组件选中节点的数据
     }
   },
