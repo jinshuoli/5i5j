@@ -791,7 +791,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$axios.get('staff_batchAxUnSub.action?code=' + this.multipleSelection).then(response => {
+        let data= {code:this.multipleSelection,channel:this.staffForm.channel}
+          this.$axios.get('staff_batchAxUnSub.action?jsonData=' + JSON.stringify(data)).then(response => {
             this.$message({ message: "解绑成功！", type: 'success', });
             this.queryStaff();
           }, response => {
