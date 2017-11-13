@@ -221,7 +221,6 @@ export default {
           this.tableData = outgoingData.records; // 表格数据
           this.pageSize = +outgoingData.page_size; // 每页显示条数
           this.totalrecord = +outgoingData.totalrecord; // 总数据条数
-          this.csDesc= +outgoingData.csDesc //文字显示
         } catch (e) {
           this.tableData = [];
           this.$message({ message: "未查询到数据！", type: 'error', });
