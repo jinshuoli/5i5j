@@ -43,6 +43,9 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="通用彩铃">
+          <el-checkbox label="选中上传通用彩铃" v-model.trim="CLform.generalMusic" :true-label="1" :false-label="0"></el-checkbox>
+        </el-form-item>
         <el-form-item label="上传彩铃">
           <el-upload ref="uploadCL" action="/5i5j/ringtone_uploadRingtone.action" accept="audio/*" name="bgm" :data="{'form': JSON.stringify(CLform)}" :on-success="flieSuccess" :on-error="fileError" :file-list="fileList" :auto-upload="false">
             <el-button type="primary" icon="upload">选择彩铃</el-button>
@@ -70,7 +73,8 @@ export default {
       // 彩铃表单
       CLform:{
         name:'',
-        city:''
+        city:'',
+        generalMusic:""//是否上传彩铃
       },
       fileList: [],
       pushcl: {},
@@ -88,7 +92,8 @@ export default {
       this.dialogCL = true
       this.CLform = {
         name:'',
-        city:''
+        city:'',
+        generalMusic:""
       },
       this.fileList = [];
       this.pushcl = {};

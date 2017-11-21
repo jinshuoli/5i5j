@@ -48,8 +48,8 @@
 <!--         <el-form-item label="所属公司" prop="company">
           <el-select v-model.trim="AccountForm.company" style="width:100%" placeholder="选择所属公司">
             <el-option v-for="item in CompanyGet" :label="item.descrShort" :value="item.setId" :key="item.setId"></el-option>
-          </el-select> -->
-        </el-form-item>
+          </el-select>
+        </el-form-item> -->
         <el-form-item label="选择部门" prop="org">
           【 <span v-text="AccountForm.org"></span> 】 <a href="javaScript:void(0)" @click="openTreeDialog">选择</a>
         </el-form-item>

@@ -24,6 +24,11 @@
           <el-option label="有" value="1"></el-option>
           <el-option label="无" value="0"></el-option>
         </el-select>
+        <el-select v-model.trim="staffForm.bind" placeholder="不计绑定">
+          <el-option label="不计绑定" value="all"></el-option>
+          <el-option label="有" value="1"></el-option>
+          <el-option label="无" value="0"></el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <el-row>
@@ -784,7 +789,7 @@ export default {
     // 解绑
     unAllBind() {
       if(this.multipleSelection.length <= 0 ){
-        this.$message({ type: 'info', message: '请选择您要解绑的部门！' });
+        this.$message({ type: 'info', message: '请选择您要解绑的员工！' });
       }else{
         this.$confirm('此操作将会解绑选中的全部员工，您确定要继续吗？', '解绑员工', {
           confirmButtonText: '确定',

@@ -9,6 +9,18 @@
         </el-select>
       </el-form-item>
       <el-form-item>
+        <el-select v-model.trim="callLogForm.State" clearable placeholder="状态">
+          <el-option v-for="itemsta in ChannelSta" :label="itemsta.desc" :value="itemsta.stateId" :key="itemsta.stateId"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model.trim="callLogForm.releaseDir" clearable placeholder="释放方式">
+          <el-option label="信号异常" :value="0"></el-option>
+          <el-option label="客户挂机" :value="1"></el-option>
+          <el-option label="员工挂机" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-select v-model.trim="callLogForm.adviser" placeholder="员工姓名">
           <el-option label="员工姓名" value="name"></el-option>
           <el-option label="员工号码" value="number"></el-option>
@@ -61,8 +73,11 @@
       <el-table-column prop="call_time" label="拨打时间" width="150px">
       </el-table-column>
       <template v-hide="!callLogForm.isDiff">
-        <el-table-column label="时长">
+        <el-table-column label="通话时长">
           <template scope="scope">{{scope.row.callDuration}} 秒</template>
+        </el-table-column>
+        <el-table-column label="拨打时长">
+          <template scope="scope">{{scope.row.duration}} 秒</template>
         </el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
@@ -143,6 +158,7 @@ export default {
   data() {
     return {
       ChannelGet: [],
+      ChannelSta: [],
       // 选择部门
       isTreeDialog: false,
       // 呼出记录的表单（头）
@@ -150,6 +166,8 @@ export default {
         dept: '全部',
         deptId: '',
         Channel: '',
+        State:'',
+        releaseDir:'',
         adviser: 'name',
         nameOrUser: '',
         CustomerNumber: '',
@@ -178,6 +196,12 @@ export default {
     getChannel() {
       this.$axios.get('channel_channelList.action').then(response => {
         this.ChannelGet = JSON.parse(response.data)
+      });
+    },
+    // 获取渠道下拉框信息
+    getState() {
+      this.$axios.get('callRecords_getStateList.action').then(response => {
+        this.ChannelSta = JSON.parse(response.data)
       })
     },
     // ******* 员工 *********
@@ -265,7 +289,8 @@ export default {
     },
   },
   created() {
-    this.getChannel()
+    this.getChannel();
+    this.getState();
   }
 }
 
