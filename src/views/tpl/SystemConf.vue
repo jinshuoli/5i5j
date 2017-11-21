@@ -27,12 +27,17 @@
               <!--  通话设置 -->
             </call-setup>
           </el-tab-pane>
-          <!-- <el-tab-pane label="黑名单" name="sixth">黑名单</el-tab-pane> -->
+          <!-- <el-tab-pane label="黑名单" name="">黑名单</el-tab-pane> -->
           <!-- <el-tab-pane label="数据推送" name="seventh">数据推送</el-tab-pane> -->
           <el-tab-pane label="活动日志" name="Ninth">
             <operation-log>
               <!-- 活动日志 -->
             </operation-log>
+          </el-tab-pane>
+          <el-tab-pane label="黑名单" name="sixth">
+            <black-list>
+              <!-- 黑名单 -->
+            </black-list>
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -46,6 +51,7 @@ import CLAdmin from '@/components/StystemConf/CLAdmin'
 import smsTpl from '@/components/StystemConf/smsTpl'
 import callSetup from '@/components/StystemConf/callSetup'
 import operationLog from '@/components/StystemConf/operationLog'
+import blackList from '@/components/StystemConf/blackList'
 
 export default {
   components: {
@@ -55,6 +61,7 @@ export default {
     smsTpl,
     callSetup,
     operationLog,
+    blackList,
   },
   data() {
     return {
